@@ -9,11 +9,11 @@ contract NativeTokenReceiver is OwnershipByAccessControl {
     event ReceivedWithEmptyCalldata(address from, uint256 value);
     event ReceivedByFallback(address from, uint256 value);
 
-    receive() external payable {
+    receive() external virtual payable {
         emit ReceivedWithEmptyCalldata(msg.sender, msg.value);
     }
 
-    fallback() external payable {
+    fallback() external virtual payable {
         emit ReceivedByFallback(msg.sender, msg.value);
     }
 
