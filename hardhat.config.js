@@ -59,8 +59,8 @@ const config = {
   },
   namedAccounts: {
     deployer: 6,
-    tokenOwner: 7,
-    proxy01Owner: 5
+    first: 7,
+    second: 5
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY

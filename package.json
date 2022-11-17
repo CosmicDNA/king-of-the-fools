@@ -22,7 +22,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "prepare": "husky install",
-    "gas-report": "env ENABLE_GAS_REPORT=1 npm run test"
+    "gas-report": "env ENABLE_GAS_REPORT=1 yarn test"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
