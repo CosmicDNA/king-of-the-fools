@@ -87,6 +87,15 @@ describe('KingOfTheFools contract', () => {
     this.credit = ethers.utils.parseEther('1.0')
     this.margin = ethers.utils.parseEther('0.1')
   })
+  it('Ownership transfer', async () => {
+    const firstOwner = await this.kingOfTheFools.owner()
+    expect(firstOwner).to.equal(this.deployer.address)
+    await expect(this.kingOfTheFools.connect(this.deployer).transferOwnership(this.second.address))
+      .to.emit(this.kingOfTheFools, 'OwnershipTransferred')
+      .withArgs(this.deployer.address, this.second.address)
+    const secondOwner = await this.kingOfTheFools.owner()
+    expect(secondOwner).to.equal(this.second.address)
+  })
   describe('Should emit EthDepositAccepted', async () => {
     it('when received with empty calldata', async () => {
       await expect(sendWithEmptyCalldata(this.kingOfTheFools, this.first, this.credit))
