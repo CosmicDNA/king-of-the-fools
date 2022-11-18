@@ -170,5 +170,15 @@ describe('KingOfTheFools contract', () => {
       }))
         .to.be.revertedWith('Insufficient deposit')
     })
+    it('should emit DepositTranferred', async () => {
+      // Second person deposits 1.5 ETH there
+      const value = ethers.utils.parseEther('1.5')
+      await expect(this.second.sendTransaction({
+        to: this.kingOfTheFools.address,
+        value
+      }))
+        .to.emit(this.kingOfTheFools, 'DepositTranferred')
+        .withArgs(this.second.address, this.first.address, value)
+    })
   })
 })

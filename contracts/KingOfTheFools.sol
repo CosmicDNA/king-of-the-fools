@@ -7,6 +7,7 @@ pragma solidity 0.8.9;
 
 contract KingOfTheFools is NativeTokenReceiver, TokenRecover {
     event EthDepositAccepted(address from, uint value);
+    event DepositTranferred(address from, address to, uint value);
 
     uint private lastDeposit = 0;
     address private previousDepositor;
@@ -26,10 +27,12 @@ contract KingOfTheFools is NativeTokenReceiver, TokenRecover {
       require(value >= (15 * lastDeposit + 5) / (10), "Insufficient deposit");
       lastDeposit = value;
       address receiver = previousDepositor;
+      address from = _msgSender();
       if (receiver != address(0)){
         payable(receiver).transfer(value);
+        emit DepositTranferred(from, receiver, value);
       }
-      previousDepositor = _msgSender();
-      emit EthDepositAccepted(_msgSender(), value);
+      previousDepositor = from;
+      emit EthDepositAccepted(from, value);
     }
 }
