@@ -46,8 +46,6 @@ class Ledger {
     }
     const ledger = new Ledger(this.namedSigners)
     ledger.entries = this.entries.map((entry, index) => {
-      // In this case item correspond to currentValue of array a,
-      // using index to get value from array b
       return new LedgerEntry(entry.name, entry.balance.sub(other.entries[index].balance))
     })
     return ledger
@@ -55,9 +53,6 @@ class Ledger {
 }
 
 const getLedger = async (namedSigners) => {
-  // return await Promise.all(Object.entries(namedSigners)
-  //   .map(async (entry) => { return { name: entry[0], balance: await web3.eth.getBalance(entry[1].address) } })
-  // )
   const ledger = new Ledger(namedSigners)
   await ledger.initialize()
   return ledger
@@ -94,14 +89,14 @@ describe('KingOfTheFools contract', () => {
   })
   describe('Should emit EthDepositAccepted', async () => {
     it('when received with empty calldata', async () => {
-      await expect(sendWithEmptyCalldata(this, this.first, this.credit))
+      await expect(sendWithEmptyCalldata(this.kingOfTheFools, this.first, this.credit))
         .to.emit(this.kingOfTheFools, 'EthDepositAccepted')
         .withArgs(this.first.address, this.credit)
       const contractBalance = await web3.eth.getBalance(this.kingOfTheFools.address)
       expect(contractBalance).to.be.equal(this.credit)
     })
     it('when received by fallback', async () => {
-      await expect(sendByFallback(this, this.first, this.credit))
+      await expect(sendByFallback(this.kingOfTheFools, this.first, this.credit))
         .to.emit(this.kingOfTheFools, 'EthDepositAccepted')
         .withArgs(this.first.address, this.credit)
       const contractBalance = await web3.eth.getBalance(this.kingOfTheFools.address)
