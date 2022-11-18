@@ -15,15 +15,15 @@ describe('KingOfTheFools contract', () => {
     this.credit = ethers.utils.parseEther('1.0')
     this.margin = ethers.utils.parseEther('0.1')
   })
-  describe('Should emit ETHDepositAccepted', async () => {
+  describe('Should emit EthDepositAccepted', async () => {
     it('when received with empty calldata', async () => {
       await expect(sendWithEmptyCalldata(this))
-        .to.emit(this.kingOfTheFools, 'ETHDepositAccepted')
+        .to.emit(this.kingOfTheFools, 'EthDepositAccepted')
         .withArgs(this.first.address, this.credit)
     })
     it('when received by fallback', async () => {
       await expect(sendByFallback(this))
-        .to.emit(this.kingOfTheFools, 'ETHDepositAccepted')
+        .to.emit(this.kingOfTheFools, 'EthDepositAccepted')
         .withArgs(this.first.address, this.credit)
     })
   })
