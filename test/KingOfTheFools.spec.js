@@ -108,8 +108,7 @@ describe('KingOfTheFools contract', () => {
       expect(contractBalance).to.be.equal(this.credit)
     })
   })
-  it('Example', async () => {
-    this.secondDeposit = ethers.utils.parseEther('1.5')
+  it('Canonical Example', async () => {
     const initialLedger = await getLedger(this.namedSigners)
     // 1. Smart contract is supposed to be empty
     let contractBalance = await web3.eth.getBalance(this.kingOfTheFools.address)
@@ -133,6 +132,7 @@ describe('KingOfTheFools contract', () => {
     expect(contractBalance).to.be.equal(this.credit)
 
     // 3. Second person deposits 1.5 ETH there
+    this.secondDeposit = ethers.utils.parseEther('1.5')
     tx = await this.second.sendTransaction({
       to: this.kingOfTheFools.address,
       value: this.secondDeposit
@@ -148,5 +148,23 @@ describe('KingOfTheFools contract', () => {
     // Assure contract has only the first deposit.
     contractBalance = await web3.eth.getBalance(this.kingOfTheFools.address)
     expect(contractBalance).to.be.equal(this.credit)
+  })
+  describe('After initial deposit of 1 ETH', async () => {
+    beforeEach('', async () => {
+      // First person deposits 1 ETH there
+      await this.first.sendTransaction({
+        to: this.kingOfTheFools.address,
+        value: this.credit
+      })
+    })
+    it('revert when under 1.5x', async () => {
+      // Second person deposits 1.49 ETH there
+      this.secondDeposit = ethers.utils.parseEther('1.49')
+      await expect(this.second.sendTransaction({
+        to: this.kingOfTheFools.address,
+        value: ethers.utils.parseEther('1.49')
+      }))
+        .to.be.revertedWith('Did not reach 1.5x more than previous deposit')
+    })
   })
 })
