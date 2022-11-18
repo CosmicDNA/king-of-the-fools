@@ -23,9 +23,6 @@ contract NativeTokenReceiver is OwnershipByAccessControl {
         uint256 amount = address(this).balance;
 
         // send all Native tokens to owner
-        // Owner can receive Native tokens since the address of owner is payable
-        // solhint-disable-next-line avoid-low-level-calls
-        (bool success, ) = owner.call{value: amount}("");
-        require(success, "Failed to withdraw Ether");
+        payable(owner).transfer(amount);
     }
 }
