@@ -22,7 +22,8 @@ yarn
 ### 👕 Linting
 
 ```terminal
-yarn precommit
+yarn lint
+yarn solhint
 ```
 
 ### ✅ Testing
