@@ -24,5 +24,6 @@ contract KingOfTheFools is NativeTokenReceiver, TokenRecover {
         payable(previousDepositor).transfer(value);
       }
       previousDepositor = _msgSender();
+      lastDeposit = value;
     }
 }
