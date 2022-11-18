@@ -1,5 +1,6 @@
 import { /* setupUsers, connectAndGetNamedAccounts, */ getNamedSigners } from '../src/signers'
 import { getDeploymentArguments } from '../src/getDeploymentArguments'
+import { sendByFallback, sendWithEmptyCalldata } from './utils/native-token-send-types'
 
 // We import Chai to use its asserting functions here.
 import { expect } from './utils/chai-setup'
@@ -20,27 +21,6 @@ const tests = () => {
   })
 }
 
-const sendWithEmptyCalldata = () => {
-  return this.first.sendTransaction({
-    to: this.kingOfTheFools.address,
-    value: this.credit
-  })
-}
-
-const sendByFallback = () => {
-  const nonExistentFuncSignature = 'nonExistentFunc(uint256,uint256)'
-  const fakeDemoContract = new ethers.Contract(
-    this.kingOfTheFools.address,
-    [
-      ...this.kingOfTheFools.interface.fragments,
-      `function ${nonExistentFuncSignature} payable`
-    ],
-    this.first
-  )
-  const tx = fakeDemoContract[nonExistentFuncSignature](0, 0, { value: this.credit })
-  return tx
-}
-
 describe('NativeTokenReceiver contract', () => {
   beforeEach(async () => {
     await deployments.fixture(['KingOfTheFools'])
@@ -51,24 +31,24 @@ describe('NativeTokenReceiver contract', () => {
     this.margin = ethers.utils.parseEther('0.1')
   })
   it('Should emit ReceivedWithEmptyCalldata', async () => {
-    await expect(sendWithEmptyCalldata())
+    await expect(sendWithEmptyCalldata(this))
       .to.emit(this.kingOfTheFools, 'ReceivedWithEmptyCalldata')
       .withArgs(this.first.address, this.credit)
   })
   it('Should emit ReceivedByFallback', async () => {
-    await expect(sendByFallback())
+    await expect(sendByFallback(this))
       .to.emit(this.kingOfTheFools, 'ReceivedByFallback')
       .withArgs(this.first.address, this.credit)
   })
   describe('Received with empty calldata', async () => {
     beforeEach(async () => {
-      await sendWithEmptyCalldata()
+      await sendWithEmptyCalldata(this)
     })
     tests()
   })
   describe('Received by fallback', async () => {
     beforeEach(async () => {
-      await sendByFallback()
+      await sendByFallback(this)
     })
     tests()
   })

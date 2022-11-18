@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 import "./NativeTokenReceiver.sol";
 import "./TokenRecover.sol";
+import "hardhat/console.sol";
 
 pragma solidity 0.8.9;
 
 contract KingOfTheFools is NativeTokenReceiver, TokenRecover {
+    event ETHDepositAccepted(address from, uint value);
+
     uint lastDeposit = 0;
     address previousDepositor;
 
@@ -25,5 +28,6 @@ contract KingOfTheFools is NativeTokenReceiver, TokenRecover {
       }
       previousDepositor = _msgSender();
       lastDeposit = value;
+      emit ETHDepositAccepted(_msgSender(), value);
     }
 }
