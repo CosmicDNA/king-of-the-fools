@@ -31,24 +31,24 @@ describe('NativeTokenReceiver contract', () => {
     this.margin = ethers.utils.parseEther('0.1')
   })
   it('Should emit ReceivedWithEmptyCalldata', async () => {
-    await expect(sendWithEmptyCalldata(this))
+    await expect(sendWithEmptyCalldata(this, this.first, this.credit))
       .to.emit(this.kingOfTheFools, 'ReceivedWithEmptyCalldata')
       .withArgs(this.first.address, this.credit)
   })
   it('Should emit ReceivedByFallback', async () => {
-    await expect(sendByFallback(this))
+    await expect(sendByFallback(this, this.first, this.credit))
       .to.emit(this.kingOfTheFools, 'ReceivedByFallback')
       .withArgs(this.first.address, this.credit)
   })
   describe('Received with empty calldata', async () => {
     beforeEach(async () => {
-      await sendWithEmptyCalldata(this)
+      await sendWithEmptyCalldata(this, this.first, this.credit)
     })
     tests()
   })
   describe('Received by fallback', async () => {
     beforeEach(async () => {
-      await sendByFallback(this)
+      await sendByFallback(this, this.first, this.credit)
     })
     tests()
   })

@@ -15,6 +15,7 @@ module.exports = {
   rules: {
   },
   globals: {
+    web3: true,
     defender: true,
     hre: true,
     ethers: true,

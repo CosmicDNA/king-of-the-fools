@@ -1,11 +1,11 @@
-const sendWithEmptyCalldata = (self) => {
-  return self.first.sendTransaction({
+const sendWithEmptyCalldata = (self, from, value) => {
+  return from.sendTransaction({
     to: self.kingOfTheFools.address,
-    value: self.credit
+    value
   })
 }
 
-const sendByFallback = (self) => {
+const sendByFallback = (self, from, value) => {
   const nonExistentFuncSignature = 'nonExistentFunc(uint256,uint256)'
   const fakeDemoContract = new ethers.Contract(
     self.kingOfTheFools.address,
@@ -13,9 +13,9 @@ const sendByFallback = (self) => {
       ...self.kingOfTheFools.interface.fragments,
       `function ${nonExistentFuncSignature} payable`
     ],
-    self.first
+    from
   )
-  const tx = fakeDemoContract[nonExistentFuncSignature](0, 0, { value: self.credit })
+  const tx = fakeDemoContract[nonExistentFuncSignature](0, 0, { value })
   return tx
 }
 

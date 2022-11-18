@@ -68,5 +68,8 @@
   "lint-staged": {
     "*.js": "eslint --fix",
     "*.sol": "solhint --fix"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-web3": "^2.0.0"
   }
 }
