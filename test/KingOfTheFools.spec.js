@@ -79,7 +79,7 @@ const getLedgerChange = (ledgerOne, ledgerTwo) => {
 
 const compareBalances = (balancesA, balancesB) => {
   balancesA.forEach((balance, index) => {
-    expect(balance).to.be.bignumber.equal(balancesB[index])
+    expect(balance).to.be.equal(balancesB[index])
   })
 }
 
@@ -159,12 +159,12 @@ describe('KingOfTheFools contract', () => {
     })
     it('revert when under 1.5x', async () => {
       // Second person deposits 1.49 ETH there
-      this.secondDeposit = ethers.utils.parseEther('1.49')
+      const value = ethers.utils.parseEther('1.5').sub(ethers.BigNumber.from(1))
       await expect(this.second.sendTransaction({
         to: this.kingOfTheFools.address,
-        value: ethers.utils.parseEther('1.49')
+        value
       }))
-        .to.be.revertedWith('Did not reach 1.5x more than previous deposit')
+        .to.be.revertedWith('Insufficient deposit')
     })
   })
 })
