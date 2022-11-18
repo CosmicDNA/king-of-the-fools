@@ -26,10 +26,11 @@ contract KingOfTheFools is NativeTokenReceiver, TokenRecover {
       require(value >= (15 * lastDeposit + 5) / (10), "Insufficient deposit");
       lastDeposit = value;
       address receiver = previousDepositor;
+      previousDepositor = _msgSender(); // Here the Canonical Example test does not pass
       if (receiver != address(0)){
         payable(receiver).transfer(value);
       }
-      previousDepositor = _msgSender();
+      // previousDepositor = _msgSender(); // Here the Canonical Example test does pass
       emit EthDepositAccepted(_msgSender(), value);
     }
 }
